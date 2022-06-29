@@ -71,7 +71,13 @@ jobs:
           pip install conan ninja
 
       - name: Add msbuild to PATH
+        if: contains(matrix.config.os, 'windows') # Only run this if on windows
         uses: microsoft/setup-msbuild@v1.1
+
+      - name: Install Conan
+        if: contains(matrix.config.os, 'windows') # Only run this if on windows
+        id: conan
+        uses: turtlebrowser/get-conan@main
 
       - name: 'Configure CMake'
         run: >-
