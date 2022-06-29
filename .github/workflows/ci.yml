@@ -35,7 +35,7 @@ jobs:
             name: 'ubuntu-latest-clang',
             os: ubuntu-22.04,
             cc: 'clang-14', cxx: 'clang++-14',
-            packageName: ''
+            packageName: 'clang++-14'
           }
           # - {
           # name: 'windows-latest-msvc',
@@ -59,12 +59,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3 # Clone the repository
 
-      - name: Set up Clang
-        if: contains(matrix.config.cxx, 'clang') # Only run this if on ubuntu
-        uses: egor-tensin/setup-clang@v1
-        with:
-          version: 14
-          platform: x64
+        # - name: Set up Clang
+        # if: contains(matrix.config.cxx, 'clang') # Only run this if on ubuntu
+        # uses: egor-tensin/setup-clang@v1
+        # with:
+        # version: 14
+        # platform: x64
 
       - name: 'Download dependencies'
         if: contains(matrix.config.os, 'ubuntu') # Only run this if on ubuntu
