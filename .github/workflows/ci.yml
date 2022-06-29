@@ -45,7 +45,7 @@ jobs:
             cc: 'cl', cxx: 'cl',
             environment_script: 'C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvars64.bat',
             packageName: '',
-            generator: 'Visual Studio 17 2022'
+            generator: 'Visual Studio 17 2022 -Ax64'
           }
           # - {
           # name: 'windows-latest-mingw',
