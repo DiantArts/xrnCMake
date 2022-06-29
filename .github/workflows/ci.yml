@@ -35,8 +35,8 @@ jobs:
           - {
             name: 'ubuntu-latest-clang',
             os: ubuntu-latest,
-            cc: 'clang-14', cxx: 'clang++-14',
-            packageName: clang-14,
+            cc: 'clang-13', cxx: 'clang++-13',
+            packageName: clang-13,
             isEnabled: true
           }
           # - {
