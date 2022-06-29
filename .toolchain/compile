@@ -117,10 +117,15 @@ clean() {
 
 runTests() {
     ctest --test-dir ${buildDir} -C ${buildType}
-    if [ $testsBranchNeeded = true ]; then
-        gcovr -b -j ${parallel} --delete --root ./ ./ -e ./.build/ -e ./tests/ --gcov-executable 'gcov'
+    if [ $compiler =~ *clang* ]; then
+        gcovExecutable="'llvm-cov gcov'"
     else
-        gcovr -j ${parallel} --delete --root ./ ./ -e ./.build/ -e ./tests/ --gcov-executable 'gcov'
+        gcovExecutable="'gcov'"
+    fi
+    if [ $testsBranchNeeded = true ]; then
+        gcovr -b -j ${parallel} --delete --root ./ ./ -e ./.build/ -e ./tests/ --gcov-executable $gcovExecutable
+    else
+        gcovr -j ${parallel} --delete --root ./ ./ -e ./.build/ -e ./tests/ --gcov-executable $gcovExecutable
     fi
 }
 
