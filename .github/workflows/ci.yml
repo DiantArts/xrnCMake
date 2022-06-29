@@ -39,35 +39,30 @@ jobs:
             package: clang-14,
             isEnabled: true
           }
-          - {
-            name: 'windows-latest-msvc',
-            os: windows-latest,
-            cc: 'cl', cxx: 'cl',
-            environment_script: 'C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvars64.bat',
-            package: none,
-            isEnabled: false
-          }
-          - {
-            name: 'windows-latest-mingw',
-            os: windows-latest,
-            cc: 'gcc', cxx: 'g++',
-            package: none,
-            isEnabled: false
-          }
-          - {
-            name: 'macos-latest-clang',
-            os: macos-latest,
-            cc: 'clang-13', cxx: 'clang++-13',
-            package: none,
-            isEnabled: false
-          }
+          # - {
+          # name: 'windows-latest-msvc',
+          # os: windows-latest,
+          # cc: 'cl', cxx: 'cl',
+          # environment_script: 'C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvars64.bat',
+          # package: none,
+          # isEnabled: false
+          # }
+          # - {
+          # name: 'windows-latest-mingw',
+          # os: windows-latest,
+          # cc: 'gcc', cxx: 'g++',
+          # package: none,
+          # isEnabled: false
+          # }
+          # - {
+          # name: 'macos-latest-clang',
+          # os: macos-latest,
+          # cc: 'clang-13', cxx: 'clang++-13',
+          # package: none,
+          # isEnabled: false
+          # }
     steps:
-      - name: 'Enable the job'
-        if: ${{ matrix.config.isEnabled }}
-        run: ;
-
       - uses: actions/checkout@v3 # Clone the repository
-        needs: 'Enable the job'
         with:
           ref: main # git switch main
 
