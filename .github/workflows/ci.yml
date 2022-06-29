@@ -73,15 +73,6 @@ jobs:
         run: |
           pip install conan ninja
 
-          # - name: Add msbuild to PATH
-          # if: contains(matrix.config.os, 'windows') # Only run this if on windows
-          # uses: microsoft/setup-msbuild@v1.1
-
-          # - name: Install Conan
-          # if: contains(matrix.config.os, 'windows') # Only run this if on windows
-          # id: conan
-          # uses: turtlebrowser/get-conan@main
-
       - name: 'Configure CMake'
         run: >-
           cmake
@@ -124,7 +115,7 @@ jobs:
         run: ctest -C ${{ matrix.build_type }}
 
       - name: 'Unix - Coverage' # run tests if tests are successful
-        if: runner.os != 'Windows'
+        # if: runner.os != 'Windows'
         working-directory: ${{ github.workspace }}/.build
         run: >-
           gcovr -j ${{ env.nproc }} --root ../ . --delete -e '${{ github.workspace }}/.build'
