@@ -98,7 +98,6 @@
 #include <condition_variable>
 #include <future>
 #include <mutex>
-#include <semaphore>
 #include <shared_mutex>
 #include <stop_token>
 #include <thread>
@@ -108,6 +107,7 @@
 #include <syncstream> // not available in clang-14
 #include <barrier> // not available in clang-14
 #include <latch> // not available in clang-14
+#include <semaphore> // not available in clang-14
 #endif
 
 using ::std::string_literals::operator""s;
