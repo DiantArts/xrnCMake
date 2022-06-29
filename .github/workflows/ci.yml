@@ -4,6 +4,7 @@ on: # set up the requirments to trigger the workflow
   push:
     branches:
       - main
+      - dev
 
 env: # set up the environment variables
   CMAKE_VERSION: 3.23.0
@@ -29,11 +30,11 @@ jobs:
             os: ubuntu-22.04,
             cc: 'gcc-11', cxx: 'g++-11'
           }
-          # - {
-          # name: 'ubuntu-latest-clang',
-          # os: ubuntu-latest,
-          # cc: 'clang-13', cxx: 'clang++-13'
-          # }
+          - {
+            name: 'ubuntu-latest-clang',
+            os: ubuntu-latest,
+            cc: 'clang-13', cxx: 'clang++-13'
+          }
           #- {
           #  name: 'windows-latest-msvc',
           #  os: windows-latest,
