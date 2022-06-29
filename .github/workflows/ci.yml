@@ -67,11 +67,11 @@ jobs:
       - name: 'Ubuntu - Download dependencies'
         if: contains(matrix.config.os, 'ubuntu') # Only run this if on ubuntu
         run: |
-          sudo apt-get install -y python3-pip cppcheck clang-tidy ccache moreutils cmake gcovr ${{ matrix.config.packageName }}
+          sudo apt-get install -y python3-pip cppcheck clang-tidy ccache moreutils cmake ${{ matrix.config.packageName }}
 
       - name: 'Pip - Download dependencies'
         run: |
-          pip install conan ninja
+          pip install conan ninja gcovr
 
       - name: 'Configure CMake'
         run: >-
