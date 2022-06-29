@@ -61,19 +61,20 @@ jobs:
             package: none,
             isEnabled: false
           }
-    if: ${{ matrix.config.isEnabled }}
     steps:
       - uses: actions/checkout@v3 # Clone the repository
+        if: ${{ matrix.config.isEnabled }}
         with:
           ref: main # git switch main
 
       - name: 'Download dependencies'
-        if: startsWith(matrix.config.os, 'ubuntu') # Only run this if on ubuntu
+        if: ${{ matrix.config.isEnabled }} && startsWith(matrix.config.os, 'ubuntu') # Only run this if on ubuntu
         run: |
           sudo apt-get install -y python3-pip cppcheck clang-tidy ccache moreutils cmake gcovr ${{ matrix.config.cxx }}
           pip install conan ninja
 
       - name: 'Configure CMake'
+        if: ${{ matrix.config.isEnabled }}
         run: |
           cmake \
           -S. \
@@ -107,23 +108,25 @@ jobs:
           CXX: ${{ matrix.config.cxx }}
 
       - name: 'Build'
+        if: ${{ matrix.config.isEnabled }}
         run: |
           cmake --build ./.build --config ${{ matrix.build_type }}
 
       - name: 'Unix - Test' # run tests
         working-directory: ${{ github.workspace }}/.build
-        if: runner.os != 'Windows'
+        if: ${{ matrix.config.isEnabled }} && runner.os != 'Windows'
         run: |
           ctest -C ${{ matrix.build_type }}
 
       - name: 'Unix - Coverage' # run tests if tests are successful
         working-directory: ${{ github.workspace }}/.build
-        if: runner.os != 'Windows'
+        if: ${{ matrix.config.isEnabled }} && runner.os != 'Windows'
         run: |
           gcovr -j ${{ env.nproc }} --root ../ . --delete -e '${{ github.workspace }}/.build' -e '${{ github.workspace }}/conan-cache' --xml-pretty --xml coverage-${{ matrix.config.name }}-${{ matrix.build_type }}.xml --print-summary --gcov-executable 'gcov-11'
 
       - name: 'Upload coverage to codecov' # use the recommended action to upload the coverage to codecov
         uses: codecov/codecov-action@v2
+        if: ${{ matrix.config.isEnabled }}
         with:
           verbose: true
           files: ./.build/coverage-*.xml
