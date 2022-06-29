@@ -69,7 +69,8 @@ jobs:
       - name: 'Download dependencies'
         if: startsWith(matrix.config.os, 'ubuntu') # Only run this if on ubuntu
         run: |
-          sudo apt-get install -y python3-pip cppcheck clang-tidy ccache moreutils cmake gcovr ${{ matrix.config.packageName }}
+          sudo apt update
+          sudo apt install -y python3-pip cppcheck clang-tidy ccache moreutils cmake gcovr ${{ matrix.config.packageName }}
           pip install conan ninja
 
       - name: 'Configure CMake'
@@ -120,6 +121,10 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           gcovr -j ${{ env.nproc }} --root ../ . --delete -e '${{ github.workspace }}/.build' -e '${{ github.workspace }}/conan-cache' --xml-pretty --xml coverage-${{ matrix.config.name }}-${{ matrix.build_type }}.xml --print-summary --gcov-executable 'gcov-11'
+
+      - name: 'Codecov debug' # run tests if tests are successful
+        run: |
+            ls ./.build/
 
       - name: 'Upload coverage to codecov' # use the recommended action to upload the coverage to codecov
         uses: codecov/codecov-action@v2
