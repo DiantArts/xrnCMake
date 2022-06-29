@@ -97,7 +97,6 @@
 #include <atomic>
 #include <condition_variable>
 #include <future>
-#include <latch>
 #include <mutex>
 #include <semaphore>
 #include <shared_mutex>
@@ -108,6 +107,7 @@
 #include <source_location> // not available in clang-14
 #include <syncstream> // not available in clang-14
 #include <barrier> // not available in clang-14
+#include <latch> // not available in clang-14
 #endif
 
 using ::std::string_literals::operator""s;

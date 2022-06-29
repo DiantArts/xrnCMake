@@ -30,36 +30,31 @@ jobs:
             # os: ubuntu-22.04,
             # cc: 'gcc-11', cxx: 'g++-11',
             # packageName: 'g++11'
-            # isEnabled: false
             # }
           - {
             name: 'ubuntu-latest-clang',
             os: ubuntu-latest,
             cc: 'clang-14', cxx: 'clang++-14',
-            packageName: '',
-            isEnabled: true
+            packageName: ''
           }
           # - {
           # name: 'windows-latest-msvc',
           # os: windows-latest,
           # cc: 'cl', cxx: 'cl',
           # environment_script: 'C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvars64.bat',
-          # packageName: none,
-          # isEnabled: false
+          # packageName: none
           # }
           # - {
           # name: 'windows-latest-mingw',
           # os: windows-latest,
           # cc: 'gcc', cxx: 'g++',
-          # packageName: none,
-          # isEnabled: false
+          # packageName: ''
           # }
           # - {
           # name: 'macos-latest-clang',
           # os: macos-latest,
           # cc: 'clang-14', cxx: 'clang++-14',
-          # packageName: none,
-          # isEnabled: false
+          # packageName: ''
           # }
     steps:
       - uses: actions/checkout@v3 # Clone the repository
