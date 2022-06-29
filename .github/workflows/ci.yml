@@ -65,6 +65,9 @@ jobs:
           sudo apt-get install -y python3-pip cppcheck clang-tidy ccache moreutils cmake gcovr ${{ matrix.config.packageName }}
           pip install conan ninja
 
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+
       - name: 'Configure CMake'
         run: >-
           cmake
