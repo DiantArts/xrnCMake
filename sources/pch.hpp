@@ -95,7 +95,6 @@
 #include <filesystem>
 #include <regex>
 #include <atomic>
-#include <barrier>
 #include <condition_variable>
 #include <future>
 #include <latch>
@@ -106,8 +105,9 @@
 #include <thread>
 
 #if !defined(__clang__) // clang
-#include <source_location> // not owned by clang-14
-#include <syncstream>
+#include <source_location> // not available in clang-14
+#include <syncstream> // not available in clang-14
+#include <barrier> // not available in clang-14
 #endif
 
 using ::std::string_literals::operator""s;

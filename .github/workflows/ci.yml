@@ -65,13 +65,14 @@ jobs:
       - uses: actions/checkout@v3 # Clone the repository
 
       - name: Set up Clang
+        if: contains(matrix.config.cxx, 'clang') # Only run this if on ubuntu
         uses: egor-tensin/setup-clang@v1
         with:
           version: 14
           platform: x64
 
       - name: 'Download dependencies'
-        if: startsWith(matrix.config.os, 'ubuntu') # Only run this if on ubuntu
+        if: contains(matrix.config.os, 'ubuntu') # Only run this if on ubuntu
         run: |
           sudo apt-get install -y python3-pip cppcheck clang-tidy ccache moreutils cmake gcovr ${{ matrix.config.packageName }}
           pip install conan ninja
@@ -114,14 +115,14 @@ jobs:
           cmake --build ./.build --config ${{ matrix.build_type }}
 
       - name: 'Unix - Test' # run tests
-        working-directory: ${{ github.workspace }}/.build
         if: runner.os != 'Windows'
+        working-directory: ${{ github.workspace }}/.build
         run: |
           ctest -C ${{ matrix.build_type }}
 
       - name: 'Unix - Coverage' # run tests if tests are successful
-        working-directory: ${{ github.workspace }}/.build
         if: runner.os != 'Windows'
+        working-directory: ${{ github.workspace }}/.build
         run: |
           gcovr -j ${{ env.nproc }} --root ../ . --delete -e '${{ github.workspace }}/.build' -e '${{ github.workspace }}/conan-cache' --xml-pretty --xml coverage-${{ matrix.config.name }}-${{ matrix.build_type }}.xml --print-summary --gcov-executable 'gcov-11'
 
