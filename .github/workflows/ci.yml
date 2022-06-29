@@ -61,9 +61,9 @@ jobs:
             package: none,
             isEnabled: false
           }
+    if: ${{ matrix.config.isEnabled }}
     steps:
       - uses: actions/checkout@v3 # Clone the repository
-        if: ${{ matrix.config.isEnabled }}
         with:
           ref: main # git switch main
 
