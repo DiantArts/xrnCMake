@@ -28,13 +28,13 @@ jobs:
           - {
             name: 'ubuntu-latest-gcc',
             os: ubuntu-22.04,
-            cc: 'gcc-11', cxx: 'g++-11'
+            cc: 'gcc-11', cxx: 'g++-11',
             package: g++11
           }
           - {
             name: 'ubuntu-latest-clang',
             os: ubuntu-latest,
-            cc: 'clang-14', cxx: 'clang++-14'
+            cc: 'clang-14', cxx: 'clang++-14',
             package: clang-14
           }
           #- {
