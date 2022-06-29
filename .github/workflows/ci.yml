@@ -25,18 +25,18 @@ jobs:
           - Release
           - Debug
         config:
-          - {
-            name: 'ubuntu-latest-gcc',
-            os: ubuntu-22.04,
-            cc: 'gcc-11', cxx: 'g++-11',
-            package: g++11,
-            isEnabled: false
-          }
+            # - {
+            # name: 'ubuntu-latest-gcc',
+            # os: ubuntu-22.04,
+            # cc: 'gcc-11', cxx: 'g++-11',
+            # packageName: g++11,
+            # isEnabled: false
+            # }
           - {
             name: 'ubuntu-latest-clang',
             os: ubuntu-latest,
             cc: 'clang-14', cxx: 'clang++-14',
-            package: clang-14,
+            packageName: clang-14,
             isEnabled: true
           }
           # - {
@@ -44,21 +44,21 @@ jobs:
           # os: windows-latest,
           # cc: 'cl', cxx: 'cl',
           # environment_script: 'C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvars64.bat',
-          # package: none,
+          # packageName: none,
           # isEnabled: false
           # }
           # - {
           # name: 'windows-latest-mingw',
           # os: windows-latest,
           # cc: 'gcc', cxx: 'g++',
-          # package: none,
+          # packageName: none,
           # isEnabled: false
           # }
           # - {
           # name: 'macos-latest-clang',
           # os: macos-latest,
           # cc: 'clang-13', cxx: 'clang++-13',
-          # package: none,
+          # packageName: none,
           # isEnabled: false
           # }
     steps:
@@ -69,7 +69,7 @@ jobs:
       - name: 'Download dependencies'
         if: startsWith(matrix.config.os, 'ubuntu') # Only run this if on ubuntu
         run: |
-          sudo apt-get install -y python3-pip cppcheck clang-tidy ccache moreutils cmake gcovr ${{ matrix.config.cxx }}
+          sudo apt-get install -y python3-pip cppcheck clang-tidy ccache moreutils cmake gcovr ${{ matrix.config.packageName }}
           pip install conan ninja
 
       - name: 'Configure CMake'
