@@ -22,7 +22,6 @@
 #include <functional>
 #include <initializer_list>
 #include <optional>
-// #include <source_location> // not owned by clang-14
 #include <tuple>
 #include <type_traits>
 #include <typeindex>
@@ -93,7 +92,6 @@
 // #include <spanstream> // c++23
 #include <sstream>
 #include <streambuf>
-#include <syncstream>
 #include <filesystem>
 #include <regex>
 #include <atomic>
@@ -106,6 +104,11 @@
 #include <shared_mutex>
 #include <stop_token>
 #include <thread>
+
+#if !defined(__clang__) // clang
+#include <source_location> // not owned by clang-14
+#include <syncstream>
+#endif
 
 using ::std::string_literals::operator""s;
 using ::std::literals::string_view_literals::operator""sv;
