@@ -23,7 +23,7 @@ jobs:
       matrix: # Define the matrix config
         build_type:
           - Release
-          - Debug
+            # - Debug
         config:
             # - {
             # name: 'ubuntu-latest-gcc',
@@ -63,8 +63,6 @@ jobs:
           # }
     steps:
       - uses: actions/checkout@v3 # Clone the repository
-        with:
-          ref: main # git switch main
 
       - name: Set up Clang
         uses: egor-tensin/setup-clang@v1
