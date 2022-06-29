@@ -18,8 +18,8 @@ parallel=$(nproc)
 # -------------------------------------------------------------------------------------------------
 
 declare -a listOfDisablable=("clear" "run" "build" "color" "pch")
-getoptArgShort="hglstmdc"
-getoptArgLong="help,gcc,g\+\+,clang,clang\+\+,setup,test,tests,tests_run,debug,makefile,clean,debug-cmake,type:,version:,compiler:,cc-compiler:,cxx-compiler:,directory:,parallel:"
+getoptArgShort="hglstmdcb"
+getoptArgLong="help,gcc,g\+\+,clang,clang\+\+,setup,test,tests,tests_run,debug,makefile,clean,debug-cmake,branch,type:,version:,compiler:,cc-compiler:,cxx-compiler:,directory:,parallel:"
 
 
 
@@ -32,6 +32,7 @@ Options (* only applies if cmake is setup):
     -h, --help                    Display help
     -s, --setup                   Setup CMake even if the build directory exists
     -t, --tests --tests_run       Run tests
+    -b, --branch                  Check the branch coverage (requires -t)
     -m, --make --makefile       * Use Makefile instead of Ninja
     -d, --debug                 * Use debug mode
         --debug-cmake             Enable full outputs on cmake
@@ -116,7 +117,11 @@ clean() {
 
 runTests() {
     ctest --test-dir ${buildDir} -C ${buildType}
-    gcovr -j ${parallel} --delete --root ./ ./ -e ./.build/ -e ./tests/ --gcov-executable 'gcov'
+    if [ $testsBranchNeeded = true ]; then
+        gcovr -b -j ${parallel} --delete --root ./ ./ -e ./.build/ -e ./tests/ --gcov-executable 'gcov'
+    else
+        gcovr -j ${parallel} --delete --root ./ ./ -e ./.build/ -e ./tests/ --gcov-executable 'gcov'
+    fi
 }
 
 abortError() {
@@ -133,6 +138,7 @@ setupNeeded=false
 buildNeeded=true
 runNeeded=true
 testsNeeded=false
+testsBranchNeeded=false
 makefileNeeded=false
 colorNeeded=true
 cleanNeeded=false
@@ -176,6 +182,7 @@ while [ $# -gt 0 ]; do
     -h|--help) usageNeeded=true ;;
     -s|--setup) setupNeeded=true ;;
     -t|--test|--tests|--tests_run) testsNeeded=true ;;
+    -b|--branch) testsBranchNeeded=true ;;
     -m|--make|--makefile) makefileNeeded=true ;;
     -d|--debug)
         if [ $typeModified = true ]; then
@@ -319,6 +326,11 @@ fi
 
 if [ $typeSpecifiedMultipleTime = true ]; then
     echo "${errorColor}[ERROR]${normal} Built type is specified multiple times." &1>2
+fi
+
+if [ $testsBranchNeeded = true ] && [ $testsNeeded = false ]; then
+    echo "${errorColor}[ERROR]${normal} Branch coverage needs the tests to be executed (-t)." &1>2
+    error=true
 fi
 
 if [ $error = true ]; then
