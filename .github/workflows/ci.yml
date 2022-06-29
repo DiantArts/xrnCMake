@@ -70,9 +70,9 @@ jobs:
           sudo apt-get install -y python3-pip cppcheck clang-tidy ccache moreutils cmake gcovr ${{ matrix.config.packageName }}
           pip install conan ninja
 
-      - name: Add msbuild to PATH
-        if: contains(matrix.config.os, 'windows') # Only run this if on windows
-        uses: microsoft/setup-msbuild@v1.1
+          # - name: Add msbuild to PATH
+          # if: contains(matrix.config.os, 'windows') # Only run this if on windows
+          # uses: microsoft/setup-msbuild@v1.1
 
       - name: Install Conan
         if: contains(matrix.config.os, 'windows') # Only run this if on windows

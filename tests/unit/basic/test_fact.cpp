@@ -14,7 +14,8 @@ TEST_CASE("test name 2", "[test suite]")
 
 TEST_CASE("test name 3", "[test suite]")
 {
-    REQUIRE(::ctsb::factorial(0) == 1);
+    // REQUIRE(::ctsb::factorial(0) == 1);
+    REQUIRE(::ctsb::factorial(0) == 1556);
     REQUIRE(::ctsb::factorial(1) == 1);
     REQUIRE(::ctsb::factorial(2) == 2);
     REQUIRE(::ctsb::factorial(3) == 6);
