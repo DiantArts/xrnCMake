@@ -29,14 +29,14 @@ jobs:
             # name: 'ubuntu-latest-gcc',
             # os: ubuntu-22.04,
             # cc: 'gcc-11', cxx: 'g++-11',
-            # packageName: g++11,
+            # packageName: 'g++11'
             # isEnabled: false
             # }
           - {
             name: 'ubuntu-latest-clang',
             os: ubuntu-latest,
             cc: 'clang-13', cxx: 'clang++-13',
-            packageName: clang-13,
+            packageName: '',
             isEnabled: true
           }
           # - {
@@ -66,11 +66,16 @@ jobs:
         with:
           ref: main # git switch main
 
+      - name: Set up Clang
+        uses: egor-tensin/setup-clang@v1
+        with:
+          version: latest
+          platform: x64
+
       - name: 'Download dependencies'
         if: startsWith(matrix.config.os, 'ubuntu') # Only run this if on ubuntu
         run: |
-          sudo apt update
-          sudo apt install -y python3-pip cppcheck clang-tidy ccache moreutils cmake gcovr ${{ matrix.config.packageName }}
+          sudo apt-get install -y python3-pip cppcheck clang-tidy ccache moreutils cmake gcovr ${{ matrix.config.packageName }}
           pip install conan ninja
 
       - name: 'Configure CMake'
