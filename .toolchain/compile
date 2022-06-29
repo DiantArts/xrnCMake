@@ -28,7 +28,7 @@ getoptArgLong="help,gcc,g\+\+,clang,clang\+\+,setup,test,tests,tests_run,debug,m
 usage() {
     cat << EOF
 Usage: ./.toolchain/compile [Options] [Actions]
-Options (* only applies if cmake is setup):
+Options (* only applies if cmake is setting up):
     -h, --help                    Display help
     -s, --setup                   Setup CMake even if the build directory exists
     -t, --tests --tests_run       Run tests
