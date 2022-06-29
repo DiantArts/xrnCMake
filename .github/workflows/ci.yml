@@ -122,7 +122,7 @@ jobs:
         # if: runner.os != 'Windows'
         working-directory: ${{ github.workspace }}/.build
         run: >-
-          gcovr -j ${{ env.nproc }} --root ../ . --delete -e '${{ github.workspace }}/.build' -e '${{ github.workspace }}/conan-cache' --xml-pretty --xml coverage-${{ matrix.config.name }}-${{ matrix.build_type }}.xml --print-summary --gcov-executable 'gcov-11'
+          gcovr -j ${{ env.nproc }} --root ../ . --delete -e "${{ github.workspace }}/.build" -e "${{ github.workspace }}/conan-cache" --xml-pretty --xml coverage-${{ matrix.config.name }}-${{ matrix.build_type }}.xml --print-summary --gcov-executable "${{ matrix.config.gcovExecutable }}"
 
       - name: 'Codecov debug' # run tests if tests are successful
         run: ls ./.build/
