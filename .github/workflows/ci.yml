@@ -33,7 +33,7 @@ jobs:
             # }
           - {
             name: 'ubuntu-latest-clang',
-            os: ubuntu-latest,
+            os: ubuntu-22.04,
             cc: 'clang-14', cxx: 'clang++-14',
             packageName: ''
           }
