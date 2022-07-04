@@ -11,15 +11,15 @@ runProgram() (
 compiler=clang++
 buildDir=.build
 cxxVersion=23
-buildType=Release
+buildType=Debug
 binary=${buildDir}/sources/xrn
 parallel=$(nproc)
 
 # -------------------------------------------------------------------------------------------------
 
-declare -a listOfDisablable=("clear" "run" "build" "color" "pch")
-getoptArgShort="hglstmdcb"
-getoptArgLong="help,gcc,g\+\+,clang,clang\+\+,setup,test,tests,tests_run,debug,makefile,clean,debug-cmake,branch,type:,version:,compiler:,cc-compiler:,cxx-compiler:,directory:,parallel:"
+declare -a listOfDisablable=("clear" "run" "binary" "build" "color" "pch")
+getoptArgShort="hglstmdc"
+getoptArgLong="help,gcc,g\+\+,clang,clang\+\+,setup,test,tests,tests_run,debug,makefile,clean,debug-cmake,type:,version:,compiler:,cc-compiler:,cxx-compiler:,directory:,parallel:"
 
 
 
@@ -28,11 +28,12 @@ getoptArgLong="help,gcc,g\+\+,clang,clang\+\+,setup,test,tests,tests_run,debug,m
 usage() {
     cat << EOF
 Usage: ./.toolchain/compile [Options] [Actions]
-Options (* only applies if cmake is setting up):
+Options (* only applies if cmake is setup):
     -h, --help                    Display help
     -s, --setup                   Setup CMake even if the build directory exists
-    -t, --tests --tests_run       Run tests
-    -b, --branch                  Check the branch coverage (requires -t)
+    -t, --tests --tests_run     * Run tests (automatically sets --no-binary)
+        --with-binary           * Force the creation of the main binary
+                                  (overrides --no-binary)
     -m, --make --makefile       * Use Makefile instead of Ninja
     -d, --debug                 * Use debug mode
         --debug-cmake             Enable full outputs on cmake
@@ -55,6 +56,7 @@ Options (* only applies if cmake is setting up):
                                     clear: Do not clear the screen when running the script
                                     build: Do not build the project
                                     run: Do not run the project.
+                                    binary: Do not create the main binary
                                     color: Does not color the output (no effect on CMake)
                                 *   pch: Do not use precompiled header
                                   Notes: Those commands are combinable (--no-clear-run)
@@ -66,22 +68,26 @@ EOF
 }
 
 setupCmake() {
-    printf "Configuring CMake...\n"
     clean
     cmakeCommands=""
     if [ ${testsNeeded} = true ]; then
-        cmakeCommands+="-DENABLE_COVERAGE=true -DENABLE_UNIT_TESTING=true -DRUN_UNIT_TESTS=false -DENABLE_TESTING=true"
+        cmakeCommands+="-DENABLE_COVERAGE=true -DENABLE_UNIT_TESTING=true -DRUN_UNIT_TESTS=false -DENABLE_TESTING=true "
     else
-        cmakeCommands="-DENABLE_UNIT_TESTING=false -DRUN_UNIT_TESTS=false -DENABLE_TESTING=false"
+        cmakeCommands="-DENABLE_UNIT_TESTING=false -DRUN_UNIT_TESTS=false -DENABLE_TESTING=false "
     fi
     if [ ${makefileNeeded} = false ]; then
-        cmakeCommands+="-GNinja"
+        cmakeCommands+="-GNinja "
     fi
     if [ ${debugCmakeNeeded} = true ]; then
-        cmakeCommands+="-DENABLE_CMAKE_DEBUG=true"
+        cmakeCommands+="-DENABLE_CMAKE_DEBUG=true "
     fi
     if [ ${pchNeeded} = false ]; then
-        cmakeCommands+="-DENABLE_PCH=false"
+        cmakeCommands+="-DENABLE_PCH=false "
+    fi
+    if [ ${binaryNeeded} = true ]; then
+        cmakeCommands+="-DENABLE_BINARY=ON "
+    else
+        cmakeCommands+="-DENABLE_BINARY=OFF "
     fi
     cmake \
         -S. \
@@ -91,15 +97,17 @@ setupCmake() {
         -DXRN_CXX_VERSION=${cxxVersion} \
         -DCMAKE_BUILD_TYPE=${buildType} \
         ${cmakeCommands} || exit $?
-    #ln ${buildDir}/compile_commands.json compile_commands.json
+    ln ${buildDir}/compile_commands.json compile_commands.json
 }
 
 build() {
-    cmake --build ${buildDir} --config Release --parallel ${parallel} || exit $?
+    if [ ${clearNeeded} = true ]; then
+        clear
+    fi
+    cmake --build ${buildDir} --config ${buildType} --parallel ${parallel} || exit $?
 }
 
 run() {
-    printf "Running...\n"
     if [ ! -f "./${binary}" ]; then
         echo -e "${bold}${red}[ERROR]${normal}: the binary file './${binary}' does not exist. Try to:" 1>&2
         echo -e "    - ${bold}${red}Resolve${normal} the invalid script arguments" 1>&2
@@ -117,16 +125,7 @@ clean() {
 
 runTests() {
     ctest --test-dir ${buildDir} -C ${buildType}
-    if [ $compiler =~ *clang* ]; then
-        gcovExecutable="'llvm-cov gcov'"
-    else
-        gcovExecutable="'gcov'"
-    fi
-    if [ $testsBranchNeeded = true ]; then
-        gcovr -b -j ${parallel} --delete --root ./ ./ -e ./.build/ -e ./tests/ --gcov-executable $gcovExecutable
-    else
-        gcovr -j ${parallel} --delete --root ./ ./ -e ./.build/ -e ./tests/ --gcov-executable $gcovExecutable
-    fi
+    gcovr -j ${parallel} --delete --root ./ ./ -e ./.build/ -e ./tests/ --gcov-executable 'gcov'
 }
 
 abortError() {
@@ -142,8 +141,9 @@ clearNeeded=true
 setupNeeded=false
 buildNeeded=true
 runNeeded=true
+binaryNeeded=true
+binaryNeededForced=false
 testsNeeded=false
-testsBranchNeeded=false
 makefileNeeded=false
 colorNeeded=true
 cleanNeeded=false
@@ -186,8 +186,13 @@ while [ $# -gt 0 ]; do
     case "$1" in
     -h|--help) usageNeeded=true ;;
     -s|--setup) setupNeeded=true ;;
-    -t|--test|--tests|--tests_run) testsNeeded=true ;;
-    -b|--branch) testsBranchNeeded=true ;;
+    -t|--test|--tests|--tests_run)
+        testsNeeded=true
+        if [ $binaryNeededForced = false ]; then
+            binaryNeeded=false;
+        fi
+        ;;
+    --with-binary) binaryNeededForced=true; binaryNeeded=true ;;
     -m|--make|--makefile) makefileNeeded=true ;;
     -d|--debug)
         if [ $typeModified = true ]; then
@@ -271,6 +276,11 @@ while [ $# -gt 0 ]; do
         if [[ $1 == *"-run-"* ]] || [[ $1 == *"-run" ]]; then
             runNeeded=false;
         fi
+        if [[ $1 == *"-binary-"* ]] || [[ $1 == *"-binary" ]]; then
+            if [ $binaryNeededForced = false ]; then
+                binaryNeeded=false;
+            fi
+        fi
         if [[ $1 == *"-build-"* ]] || [[ $1 == *"-build" ]]; then
             buildNeeded=false;
         fi
@@ -280,7 +290,7 @@ while [ $# -gt 0 ]; do
         if [[ $1 == *"-pch-"* ]] || [[ $1 == *"-pch" ]]; then
             pchNeeded=false;
         fi
-        shift ;;
+        ;;
     "'clean'") cleanNeeded=true; stopAfterCleanNeeded=true ;;
     "'re'"|"'remake'"|"'rebuild'") cleanNeeded=true; setupNeeded=true ;;
     "'test'"|"'tests'"|"'run_tests'"|"'unit_test'"|"'unit_tests'") testsNeeded=true ;;
@@ -333,11 +343,6 @@ if [ $typeSpecifiedMultipleTime = true ]; then
     echo "${errorColor}[ERROR]${normal} Built type is specified multiple times." &1>2
 fi
 
-if [ $testsBranchNeeded = true ] && [ $testsNeeded = false ]; then
-    echo "${errorColor}[ERROR]${normal} Branch coverage needs the tests to be executed (-t)." &1>2
-    error=true
-fi
-
 if [ $error = true ]; then
     abortError
 fi
@@ -366,7 +371,7 @@ if [ ${buildNeeded} = true ]; then
     build
 fi
 
-if [ ${runNeeded} = true ]; then
+if [ ${runNeeded} = true ] && ${binaryNeeded} = true; then
     run
 fi
 
