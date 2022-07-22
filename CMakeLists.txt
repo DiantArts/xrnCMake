@@ -8,7 +8,17 @@ cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 project(CMakeSandbox LANGUAGES CXX)
 set(XRN_BIN_NAME xrn)
 set(XRN_CXX_VERSION 23)
-set(XRN_LIBS_REQUIRED fmt/6.2.1 catch2/2.13.6 sfml/2.5.0@bincrafters/stable)
+
+# dependencies
+set(XRN_LIBS_REQUIRED fmt/8.1.1 catch2/2.13.6)
+set(XRN_LIBRARIES_REQUIREMENTS fmt Threads) # find_package
+set(XRN_LIBRARIES_DEPENDENCY fmt::fmt Threads::Threads) # target_link_libraries
+set(XRN_LIBRARIES_HEADERS fmt) # include_directories(${library}_INCLUDE_DIRS)
+
+set(SPDLOG_BUILD_SHARED OFF)
+set(SPDLOG_FMT_EXTERNAL ON)
+set(SPDLOG_BUILD_EXAMPLE OFF)
+set(SPDLOG_BUILD_TESTS OFF)
 
 # paths
 set(XRN_TOOLCHAIN_DIR "${CMAKE_SOURCE_DIR}/.toolchain")

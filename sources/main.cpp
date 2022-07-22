@@ -1,6 +1,5 @@
 #include <pch.hpp>
 #include <fmt/format.h>
-#include <SFML/System/Time.hpp>
 
 template <
     typename Type
@@ -26,7 +25,7 @@ public:
     [[ nodiscard ]] auto getValue()
         -> Type&
     {
-        return m_value;
+        return *m_value;
     }
     [[ nodiscard ]] operator Type&()
     {
@@ -37,18 +36,17 @@ private:
     Type* m_value;
 };
 
-void func(int val)
+void func(int& val)
 {
-    ::std::cout << val << ::std::endl;
+    ++val;
 }
 
 int main()
 {
     int value{ 5 };
     OptionalReference<int> ref{ value };
-    ::std::cout << ref.hasValue() << ::std::endl;
+    ::fmt::print("Does it has a value? {} ({})\n", ref.hasValue(), ref.getValue());
     func(ref);
-    ::std::cout << ref << ::std::endl;
-    ::fmt::print("{}\n", "hello?");
+    ::fmt::print("{}, it has the following value: {}\n", "It changed?", ref.getValue());
     return 0;
 }

@@ -39,13 +39,12 @@ jobs:
               cc: 'clang-14', cxx: 'clang++-14',
               packageName: 'clang++-14',
               generator: 'Ninja',
-              gcovExecutable: '"llvm-cov-14 gcov"'
+              gcovExecutable: '"gcov-11"'
             }
             - {
               name: 'windows-msvc',
               os: windows-latest,
               cc: 'cl', cxx: 'cl',
-              environment_script: 'C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Auxiliary/Build/vcvars64.bat',
               packageName: '',
               generator: '"Visual Studio 17 2022" -AWin32',
               gcovExecutable: gcov-11

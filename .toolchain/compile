@@ -17,7 +17,7 @@ parallel=$(nproc)
 
 # -------------------------------------------------------------------------------------------------
 
-declare -a listOfDisablable=("clear" "run" "binary" "build" "color" "pch")
+declare -a listOfDisablable=("clear" "run" "cov" "coverage" "binary" "build" "color" "pch")
 getoptArgShort="hglstmdc"
 getoptArgLong="help,gcc,g\+\+,clang,clang\+\+,setup,test,tests,tests_run,debug,makefile,clean,debug-cmake,type:,version:,compiler:,cc-compiler:,cxx-compiler:,directory:,parallel:"
 
@@ -56,6 +56,7 @@ Options (* only applies if cmake is setup):
                                     clear: Do not clear the screen when running the script
                                     build: Do not build the project
                                     run: Do not run the project.
+                                    cov|coverage: Do not run the coverage report.
                                     binary: Do not create the main binary
                                     color: Does not color the output (no effect on CMake)
                                 *   pch: Do not use precompiled header
@@ -64,6 +65,7 @@ Actions:
     clean                         Clean the repository from every temporary files
     remake rebuild re             Clean and build everything again
     tests run_tests unit_tests  * Rebuild to generate and run tests informations
+    cov coverage                  Only run the coverage and nothing else
 EOF
 }
 
@@ -125,7 +127,10 @@ clean() {
 
 runTests() {
     ctest --test-dir ${buildDir} -C ${buildType}
-    gcovr -j ${parallel} --delete --root ./ ./ -e ./.build/ -e ./tests/ --gcov-executable 'gcov'
+}
+
+runCoverage() {
+    gcovr -j ${parallel} --root ./ ./ -e ./.build/ -e ./tests/ --gcov-executable 'gcov'
 }
 
 abortError() {
@@ -141,6 +146,7 @@ clearNeeded=true
 setupNeeded=false
 buildNeeded=true
 runNeeded=true
+coverageNeeded=true
 binaryNeeded=true
 binaryNeededForced=false
 testsNeeded=false
@@ -276,6 +282,9 @@ while [ $# -gt 0 ]; do
         if [[ $1 == *"-run-"* ]] || [[ $1 == *"-run" ]]; then
             runNeeded=false;
         fi
+        if [[ $1 == *"-cov-"* ]] || [[ $1 == *"-cov" ]] || [[ $1 == *"-coverage" ]] || [[ $1 == *"-coverage" ]]; then
+            coverageNeeded=false;
+        fi
         if [[ $1 == *"-binary-"* ]] || [[ $1 == *"-binary" ]]; then
             if [ $binaryNeededForced = false ]; then
                 binaryNeeded=false;
@@ -294,6 +303,7 @@ while [ $# -gt 0 ]; do
     "'clean'") cleanNeeded=true; stopAfterCleanNeeded=true ;;
     "'re'"|"'remake'"|"'rebuild'") cleanNeeded=true; setupNeeded=true ;;
     "'test'"|"'tests'"|"'run_tests'"|"'unit_test'"|"'unit_tests'") testsNeeded=true ;;
+    "'cov'"|"'coverage'") runCoverage; exit 0 ;;
     esac
     shift
 done
@@ -371,10 +381,14 @@ if [ ${buildNeeded} = true ]; then
     build
 fi
 
-if [ ${runNeeded} = true ] && ${binaryNeeded} = true; then
+if [ ${runNeeded} = true ] && [ ${binaryNeeded} = true ]; then
     run
 fi
 
 if [ ${testsNeeded} = true ]; then
     runTests
+fi
+
+if [ ${coverageNeeded} = true ]; then
+    runCoverage
 fi
