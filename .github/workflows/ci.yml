@@ -41,14 +41,13 @@ jobs:
               generator: 'Ninja',
               gcovExecutable: '"llvm-cov gcov"'
             }
-            # - {
-            # name: 'windows-mingw',
-            # os: windows-latest,
-            # cc: 'gcc', cxx: 'g++',
-            # packageName: ''o
-            # generator: 'Visual Studio 17 2022',
-            # gcovExecutable: '"none"'
-            # }
+            - {
+              name: 'windows-mingw',
+              os: windows-latest,
+              cc: 'gcc', cxx: 'g++',
+              packageName: '',
+              generator: '"Visual Studio 17 2022" -AWin32',
+            }
             - {
               name: 'windows-msvc',
               os: windows-latest,
