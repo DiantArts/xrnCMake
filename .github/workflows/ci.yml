@@ -39,7 +39,7 @@ jobs:
               cc: 'clang-14', cxx: 'clang++-14',
               packageName: 'clang++-14',
               generator: 'Ninja',
-              gcovExecutable: '"llvm-cov-12 gcov-11"'
+              gcovExecutable: '"llvm-cov gcov"'
             }
             - {
               name: 'windows-msvc',
@@ -98,4 +98,6 @@ jobs:
         uses: codecov/codecov-action@v2
         with:
           verbose: true
+          flags: ${{ matrix.config.name }}
+          name: ${{ matrix.config.name }}-coverage
           files: ./.build/coverage-${{ matrix.config.name }}-${{ matrix.build_type }}.xml
