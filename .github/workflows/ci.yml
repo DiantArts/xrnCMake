@@ -25,36 +25,36 @@ jobs:
           - Release
             # - Debug
         config:
-            - {
-              name: 'ubuntu-gcc',
-              os: ubuntu-22.04,
-              cc: 'gcc-11', cxx: 'g++-11',
-              packageName: 'g++11',
-              generator: 'Ninja',
-              gcovExecutable: '"gcov-11"'
-            }
+            # - {
+            # name: 'ubuntu-gcc',
+            # os: ubuntu-22.04,
+            # cc: 'gcc-11', cxx: 'g++-11',
+            # packageName: 'g++11',
+            # generator: 'Ninja',
+            # gcovExecutable: '"gcov-11"'
+            # }
             - {
               name: 'ubuntu-clang',
               os: ubuntu-22.04,
               cc: 'clang-14', cxx: 'clang++-14',
               packageName: 'clang++-14',
               generator: 'Ninja',
-              gcovExecutable: '"llvm-cov gcov"'
+              gcovExecutable: '"llvm-cov"'
             }
-            - {
-              name: 'windows-mingw',
-              os: windows-latest,
-              cc: 'gcc', cxx: 'g++',
-              packageName: '',
-              generator: '"Visual Studio 17 2022" -AWin32',
-            }
-            - {
-              name: 'windows-msvc',
-              os: windows-latest,
-              cc: 'cl', cxx: 'cl',
-              packageName: '',
-              generator: '"Visual Studio 17 2022" -AWin32',
-            }
+            # - {
+            # name: 'windows-mingw',
+            # os: windows-latest,
+            # cc: 'gcc', cxx: 'g++',
+            # packageName: '',
+            # generator: '"Visual Studio 17 2022" -AWin32',
+            # }
+            # - {
+            # name: 'windows-msvc',
+            # os: windows-latest,
+            # cc: 'cl', cxx: 'cl',
+            # packageName: '',
+            # generator: '"Visual Studio 17 2022" -AWin32',
+            # }
             # - {
             # name: 'macos-clang',
             # os: macos-latest,
@@ -92,7 +92,7 @@ jobs:
         run: gcovr -j ${{ env.nproc }} --root ../ . --delete -e ".build" -e "conan-cache" --xml-pretty --xml coverage-${{ matrix.config.name }}-${{ matrix.build_type }}.xml --print-summary --gcov-executable "${{ matrix.config.gcovExecutable }}"
 
       - name: 'Upload coverage to codecov' # use the recommended action to upload the coverage to codecov
-        if: runner.os != 'Windows'
+        if: runner.os == 'Linux'
         uses: codecov/codecov-action@v2
         with:
           verbose: true
