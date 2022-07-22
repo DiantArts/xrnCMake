@@ -77,34 +77,7 @@ jobs:
         run: pip install conan ninja gcovr
 
       - name: 'Configure CMake'
-        run: >
-          cmake
-            -S.
-            -B./.build
-            -G${{ matrix.config.generator }}
-            -DCMAKE_BUILD_TYPE:STRING=${{ matrix.build_type }}
-            -DCMAKE_C_COMPILER_LAUNCHER=ccache
-            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
-            -DWARNING_AS_ERRORS=true
-            -DENABLE_STD_PCH=false
-            -DENABLE_PCH=false
-            -DENABLE_STATIC_ANALYSIS=false
-            -DENABLE_CPPCHECK=false
-            -DENABLE_CLANG_TIDY=false
-            -DENABLE_SANITIZERS=false
-            -DENABLE_SANITIZER_ADDRESS=true
-            -DENABLE_SANITIZER_LEAK=true
-            -DENABLE_SANITIZER_UNDEFINED_BEHAVIOR=true
-            -DENABLE_TESTING=true
-            -DENABLE_COVERAGE=true
-            -DENABLE_UNIT_TESTING=true
-            -DENABLE_BENCHMARK=false
-            -DENABLE_FUZZ_TESTING=false
-            -DRUN_UNIT_TESTS=false
-            -DENABLE_OUTPUT_DIR=false
-            -DENABLE_BINARY=true
-            -DENABLE_STATIC_LIBRARY=false
-            -DENABLE_SHARED_LIBRARY=false
+        run: cmake -S. -B./.build -G${{ matrix.config.generator }} -DCMAKE_BUILD_TYPE:STRING=${{ matrix.build_type }} -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DWARNING_AS_ERRORS=true -DENABLE_STD_PCH=false -DENABLE_PCH=false -DENABLE_STATIC_ANALYSIS=false -DENABLE_CPPCHECK=false -DENABLE_CLANG_TIDY=false -DENABLE_SANITIZERS=false -DENABLE_SANITIZER_ADDRESS=true -DENABLE_SANITIZER_LEAK=true -DENABLE_SANITIZER_UNDEFINED_BEHAVIOR=true -DENABLE_TESTING=true -DENABLE_COVERAGE=true -DENABLE_UNIT_TESTING=true -DENABLE_BENCHMARK=false -DENABLE_FUZZ_TESTING=false -DRUN_UNIT_TESTS=false -DENABLE_OUTPUT_DIR=false -DENABLE_BINARY=true -DENABLE_STATIC_LIBRARY=false -DENABLE_SHARED_LIBRARY=false
         env: # enviroment variable to compilers (cmake might be using those)
           CC: ${{ matrix.config.cc }}
           CXX: ${{ matrix.config.cxx }}
