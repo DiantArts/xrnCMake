@@ -71,42 +71,40 @@ jobs:
 
       - name: 'Ubuntu - Download dependencies'
         if: contains(matrix.config.os, 'ubuntu') # Only run this if on ubuntu
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            python3-pip cppcheck clang-tidy ccache moreutils cmake ${{ matrix.config.packageName }}
+        run: sudo apt-get install -y python3-pip cppcheck clang-tidy ccache moreutils cmake ${{ matrix.config.packageName }}
 
       - name: 'Pip - Download dependencies'
         run: pip install conan ninja gcovr
 
       - name: 'Configure CMake'
-        run: cmake \
-          -S. \
-          -B./.build \
-          -G${{ matrix.config.generator }} \
-          -DCMAKE_BUILD_TYPE:STRING=${{ matrix.build_type }} \
-          -DCMAKE_C_COMPILER_LAUNCHER=ccache \
-          -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
-          -DWARNING_AS_ERRORS=true \
-          -DENABLE_STD_PCH=false \
-          -DENABLE_PCH=false \
-          -DENABLE_STATIC_ANALYSIS=false \
-          -DENABLE_CPPCHECK=false \
-          -DENABLE_CLANG_TIDY=false \
-          -DENABLE_SANITIZERS=false \
-          -DENABLE_SANITIZER_ADDRESS=true \
-          -DENABLE_SANITIZER_LEAK=true \
-          -DENABLE_SANITIZER_UNDEFINED_BEHAVIOR=true \
-          -DENABLE_TESTING=true \
-          -DENABLE_COVERAGE=true \
-          -DENABLE_UNIT_TESTING=true \
-          -DENABLE_BENCHMARK=false \
-          -DENABLE_FUZZ_TESTING=false \
-          -DRUN_UNIT_TESTS=false \
-          -DENABLE_OUTPUT_DIR=false \
-          -DENABLE_BINARY=true \
-          -DENABLE_STATIC_LIBRARY=false \
-          -DENABLE_SHARED_LIBRARY=false
+        run: |
+          cmake \
+            -S. \
+            -B./.build \
+            -G${{ matrix.config.generator }} \
+            -DCMAKE_BUILD_TYPE:STRING=${{ matrix.build_type }} \
+            -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+            -DWARNING_AS_ERRORS=true \
+            -DENABLE_STD_PCH=false \
+            -DENABLE_PCH=false \
+            -DENABLE_STATIC_ANALYSIS=false \
+            -DENABLE_CPPCHECK=false \
+            -DENABLE_CLANG_TIDY=false \
+            -DENABLE_SANITIZERS=false \
+            -DENABLE_SANITIZER_ADDRESS=true \
+            -DENABLE_SANITIZER_LEAK=true \
+            -DENABLE_SANITIZER_UNDEFINED_BEHAVIOR=true \
+            -DENABLE_TESTING=true \
+            -DENABLE_COVERAGE=true \
+            -DENABLE_UNIT_TESTING=true \
+            -DENABLE_BENCHMARK=false \
+            -DENABLE_FUZZ_TESTING=false \
+            -DRUN_UNIT_TESTS=false \
+            -DENABLE_OUTPUT_DIR=false \
+            -DENABLE_BINARY=true \
+            -DENABLE_STATIC_LIBRARY=false \
+            -DENABLE_SHARED_LIBRARY=false
         env: # enviroment variable to compilers (cmake might be using those)
           CC: ${{ matrix.config.cc }}
           CXX: ${{ matrix.config.cxx }}
@@ -119,7 +117,7 @@ jobs:
         run: ctest -C ${{ matrix.build_type }}
 
       - name: 'Unix - Coverage' # run tests if tests are successful
-        # if: runner.os != 'Windows'
+        if: runner.os != 'Windows'
         working-directory: ${{ github.workspace }}/.build
         run: gcovr -j ${{ env.nproc }} --root ../ . --delete -e ".build" -e "conan-cache" --xml-pretty --xml coverage-${{ matrix.config.name }}-${{ matrix.build_type }}.xml --print-summary --gcov-executable "${{ matrix.config.gcovExecutable }}"
             # gcovr -j ${{ env.nproc }} --root ../ . --delete -e "${{ github.workspace }}/.build" -e "${{ github.workspace }}/conan-cache" --xml-pretty --xml coverage-${{ matrix.config.name }}-${{ matrix.build_type }}.xml --print-summary --gcov-executable "${{ matrix.config.gcovExecutable }}"
