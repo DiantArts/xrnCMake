@@ -42,20 +42,18 @@ jobs:
               gcovExecutable: '"llvm-cov gcov"'
             }
             - {
-              name: 'windows-msvc',
+              name: 'windows-mingw',
               os: windows-latest,
-              cc: 'cl', cxx: 'cl',
-              packageName: '',
-              generator: '"Visual Studio 17 2022" -AWin32',
-              gcovExecutable: gcov-11
+              cc: 'gcc', cxx: 'g++',
+              packageName: ''o
+              generator: 'Visual Studio 17 2022',
             }
             # - {
-            # name: 'windows-mingw',
+            # name: 'windows-msvc',
             # os: windows-latest,
-            # cc: 'gcc', cxx: 'g++',
-            # packageName: ''o
-            # generator: 'Visual Studio 17 2022',
-            # gcovExecutable: gcov-11
+            # cc: 'cl', cxx: 'cl',
+            # packageName: '',
+            # generator: '"Visual Studio 17 2022" -AWin32',
             # }
             # - {
             # name: 'macos-clang',
@@ -89,12 +87,12 @@ jobs:
         run: ctest -C ${{ matrix.build_type }}
 
       - name: 'Unix - Coverage'
-        # if: runner.os != 'Windows'
+        if: runner.os != 'Windows'
         working-directory: ${{ github.workspace }}/.build
         run: gcovr -j ${{ env.nproc }} --root ../ . --delete -e ".build" -e "conan-cache" --xml-pretty --xml coverage-${{ matrix.config.name }}-${{ matrix.build_type }}.xml --print-summary --gcov-executable "${{ matrix.config.gcovExecutable }}"
-            # gcovr -j ${{ env.nproc }} --root ../ . --delete -e "${{ github.workspace }}/.build" -e "${{ github.workspace }}/conan-cache" --xml-pretty --xml coverage-${{ matrix.config.name }}-${{ matrix.build_type }}.xml --print-summary --gcov-executable "${{ matrix.config.gcovExecutable }}"
 
       - name: 'Upload coverage to codecov' # use the recommended action to upload the coverage to codecov
+        needs: 'Unix - Coverage'
         uses: codecov/codecov-action@v2
         with:
           verbose: true
