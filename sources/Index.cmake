@@ -10,7 +10,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/Dependencies.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/Cache.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/Documentation.cmake) # documentation configuration in the file
 
-macro(setup_filepaths)
+macro(default_setup_filepaths)
     set(ALLOW_DUPLICATE_CUSTOM_TARGETS TRUE)
 
     set(XRN_ROOT_DIR_RELATIVE ${CMAKE_SOURCE_DIR})
@@ -37,7 +37,7 @@ macro(setup_filepaths)
     get_filename_component(XRN_FRAGMENTS_DIR ${XRN_FRAGMENTS_DIR_RELATIVE} REALPATH)
 endmacro()
 
-macro(auto_find_files)
+macro(default_find_files)
     get_filename_component(XRN_MAIN ${XRN_SOURCES_DIR}/main.cpp REALPATH)
     file(
         GLOB_RECURSE
@@ -77,4 +77,12 @@ macro(auto_find_files)
         PARENT_SCOPE
     )
     list(REMOVE_ITEM XRN_SOURCES "${XRN_MAIN}")
+endmacro()
+
+macro(default_setup_dependencies)
+    get_filename_component(XRN_BIN_NAME ${CMAKE_CURRENT_LIST_DIR} NAME)
+    string(REPLACE "-src" "-build" XRN_BIN_NAME ${XRN_BIN_NAME})
+
+    set(XRN_${XRN_BIN_NAME}_DEPENDENCY_DIR ${XRN_BUILD_DIR}/_deps/${XRN_BIN_NAME})
+    set(CMAKE_MODULE_PATH ${XRN_BUILD_DIR} ${XRN_${XRN_BIN_NAME}_DEPENDENCY_DIR})
 endmacro()
