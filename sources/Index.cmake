@@ -177,22 +177,3 @@ extract_documentation()
 # allow for static analysis options
 include(${XRN_TOOLCHAIN_DIR}/StaticAnalyzers.cmake) # possible to add more static analyzers in the file
 run_static_analysis()
-
-
-
-# =========================================================================
-# Sub directories
-# =========================================================================
-
-# sub projects
-add_subdirectory(${XRN_SOURCES_DIR})
-
-
-
-# =========================================================================
-# Tests
-# =========================================================================
-
-# tests
-include(${XRN_TOOLCHAIN_DIR}/Tests.cmake)
-enable_tests()
