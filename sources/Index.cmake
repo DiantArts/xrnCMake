@@ -7,7 +7,7 @@ cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 # =========================================================================
 
 # paths
-set(XRN_TOOLCHAIN_DIR "${CMAKE_CURRENT_LIST_DIR}/sources")
+set(XRN_TOOLCHAIN_DIR "${CMAKE_CURRENT_LIST_DIR}/")
 set(XRN_TOOLCHAIN_DETAILS_DIR "${XRN_TOOLCHAIN_DIR}/.details")
 set(XRN_SOURCES_DIR "sources")
 set(XRN_TESTS_DIR "tests")
