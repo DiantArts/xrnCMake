@@ -1,3 +1,5 @@
+include_guard()
+
 cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 
 # =========================================================================
@@ -5,7 +7,7 @@ cmake_minimum_required(VERSION 3.20 FATAL_ERROR)
 # =========================================================================
 
 # paths
-set(XRN_TOOLCHAIN_DIR "${CMAKE_SOURCE_DIR}/sources")
+set(XRN_TOOLCHAIN_DIR "${CMAKE_CURRENT_LIST_DIR}/sources")
 set(XRN_TOOLCHAIN_DETAILS_DIR "${XRN_TOOLCHAIN_DIR}/.details")
 set(XRN_SOURCES_DIR "sources")
 set(XRN_TESTS_DIR "tests")
@@ -90,51 +92,6 @@ get_filename_component(XRN_OUTPUT_DIR ${XRN_BUILD_DIR}/${XRN_OUTPUT_DIR} REALPAT
 get_filename_component(XRN_SHADERS_DIR ${XRN_SHADERS_DIR} REALPATH)
 get_filename_component(XRN_VERTEXES_DIR ${XRN_VERTEXES_DIR_RELATIVE} REALPATH)
 get_filename_component(XRN_FRAGMENTS_DIR ${XRN_FRAGMENTS_DIR_RELATIVE} REALPATH)
-
-
-
-# =========================================================================
-# Sources
-# =========================================================================
-
-get_filename_component(XRN_MAIN ${XRN_SOURCES_DIR}/main.cpp REALPATH)
-file(
-    GLOB_RECURSE
-    XRN_SOURCES
-    ${XRN_SOURCES_DIR}/*.cpp
-    ${XRN_SOURCES_DIR}/*.cxx
-    ${XRN_SOURCES_DIR}/*.c
-    ${XRN_SOURCES_DIR}/*.CC
-    PARENT_SCOPE
-)
-file(
-    GLOB_RECURSE
-    XRN_HEADERS
-    ${XRN_SOURCES_DIR}/*.hpp
-    ${XRN_SOURCES_DIR}/*.hxx
-    ${XRN_SOURCES_DIR}/*.h
-    PARENT_SCOPE
-)
-file(
-    GLOB_RECURSE
-    XRN_FRAGMENTS
-    ${XRN_FRAGMENTS_DIR}/*.glsl
-    ${XRN_FRAGMENTS_DIR}/*.shader
-    ${XRN_SHADERS_DIR}/*.vert
-    ${XRN_SHADERS_DIR}/*.vertex
-    ${XRN_SHADERS_DIR}/*.vs
-    PARENT_SCOPE
-)
-file(
-    GLOB_RECURSE
-    XRN_VERTEXES
-    ${XRN_VERTEXES_DIR}/*.glsl
-    ${XRN_VERTEXES_DIR}/*.shader
-    ${XRN_SHADERS_DIR}/*.vert
-    ${XRN_SHADERS_DIR}/*.vertex
-    ${XRN_SHADERS_DIR}/*.fs
-    PARENT_SCOPE
-)
 
 
 
