@@ -8,4 +8,4 @@ include(${CMAKE_CURRENT_LIST_DIR}/StaticAnalyzers.cmake) # possible to add more 
 include(${CMAKE_CURRENT_LIST_DIR}/Shaders.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/Dependencies.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/Cache.cmake)
-# include(${CMAKE_CURRENT_LIST_DIR}/Documentation.cmake) # documentation configuration in the file
+include(${CMAKE_CURRENT_LIST_DIR}/Documentation.cmake) # documentation configuration in the file
