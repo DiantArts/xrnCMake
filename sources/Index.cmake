@@ -1,9 +1,9 @@
 include_guard()
 
 include(${CMAKE_CURRENT_LIST_DIR}/StandardProjectSettings.cmake)
-# include(${CMAKE_CURRENT_LIST_DIR}/Sanitizers.cmake)
-# include(${CMAKE_CURRENT_LIST_DIR}/CompilerWarnings.cmake)
-# include(${CMAKE_CURRENT_LIST_DIR}/CompilerFlags.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/Sanitizers.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/CompilerWarnings.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/CompilerFlags.cmake)
 # include(${CMAKE_CURRENT_LIST_DIR}/Shaders.cmake)
 # include(${CMAKE_CURRENT_LIST_DIR}/Dependencies.cmake)
 # include(${CMAKE_CURRENT_LIST_DIR}/Cache.cmake)
