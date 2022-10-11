@@ -79,10 +79,56 @@ macro(default_find_files)
     list(REMOVE_ITEM XRN_SOURCES "${XRN_MAIN}")
 endmacro()
 
-macro(default_setup_dependencies)
+macro(default_setup_vars)
     get_filename_component(XRN_BIN_NAME ${CMAKE_CURRENT_LIST_DIR} NAME)
     string(REPLACE "-src" "-build" XRN_BIN_NAME ${XRN_BIN_NAME})
 
     set(XRN_${XRN_BIN_NAME}_DEPENDENCY_DIR ${XRN_BUILD_DIR}/_deps/${XRN_BIN_NAME})
     set(CMAKE_MODULE_PATH ${XRN_BUILD_DIR} ${XRN_${XRN_BIN_NAME}_DEPENDENCY_DIR})
+
+    # debug
+    if (ENABLE_CMAKE_DEBUG)
+        SET(CMAKE_VERBOSE_MAKEFILE TRUE)
+    endif ()
+endmacro()
+
+macro(default_setup_options)
+    add_library(${XRN_BIN_NAME}_project_options INTERFACE)
+
+    # basic useful actions controlled by the options/
+    set_standard_project_settings(${XRN_BIN_NAME}_project_options ${XRN_CXX_VERSION})
+
+    # sanitizer options if supported by compiler
+    enable_sanitizers(${XRN_BIN_NAME}_project_options)
+endmacro()
+
+macro(default_setup_flags)
+    add_library(${XRN_BIN_NAME}_project_warnings INTERFACE)
+
+    # compiler warnings
+    set_compiler_warnings(${XRN_BIN_NAME}_project_warnings)
+
+    # compiler flags
+    set_compiler_flags(${XRN_BIN_NAME}_project_warnings)
+endmacro()
+
+macro(default_setup_dependencies)
+    add_library(${XRN_BIN_NAME}_project_dependencies INTERFACE)
+
+    # compile shaders
+    compile_shaders(${XRN_BIN_NAME}_project_dependencies)
+
+    # download dependencies
+    download_dependencies(${XRN_BIN_NAME}_project_dependencies "${XRN_LIBRARIES_REQUIRED}")
+endmacro()
+
+macro(default_setup_extra)
+    # cache if supported by compiler
+    enable_cache()
+
+    # enable documentation
+    extract_documentation()
+
+    # allow for static analysis options
+    run_static_analysis()
 endmacro()
