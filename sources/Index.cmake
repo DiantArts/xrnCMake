@@ -9,6 +9,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/Shaders.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/Dependencies.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/Cache.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/Documentation.cmake) # documentation configuration in the file
+include(${CMAKE_CURRENT_LIST_DIR}/Tests.cmake)
 
 macro(default_setup_filepaths)
     set(ALLOW_DUPLICATE_CUSTOM_TARGETS TRUE)
