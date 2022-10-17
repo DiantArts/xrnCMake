@@ -60,6 +60,7 @@ macro(download_dependencies interface library_versions)
     include(FetchContent)
 
     target_include_directories(${interface} INTERFACE ${XRN_SOURCES_DIR})
+    target_include_directories(${interface} INTERFACE ${XRN_EXTERNALS_DIR})
 
     foreach(library_name IN LISTS XRN_PERSONAL_DEPENDENCIES)
         MESSAGE(STATUS "Dowloading ${library_name}")
