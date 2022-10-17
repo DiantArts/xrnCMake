@@ -31,7 +31,7 @@ macro(default_setup_filepaths)
     get_filename_component(XRN_TOOLCHAIN_DIR ${XRN_TOOLCHAIN_DIR} REALPATH)
     get_filename_component(XRN_TOOLCHAIN_DETAILS_DIR ${XRN_TOOLCHAIN_DETAILS_DIR} REALPATH)
     get_filename_component(XRN_SOURCES_DIR ${XRN_SOURCES_DIR} REALPATH)
-    get_filename_component(XRN_SOURCES_DIR ${XRN_EXTERNALS_DIR} REALPATH)
+    get_filename_component(XRN_EXTERNALS_DIR ${XRN_EXTERNALS_DIR} REALPATH)
     get_filename_component(XRN_TESTS_DIR ${XRN_TESTS_DIR} REALPATH)
     get_filename_component(XRN_OUTPUT_DIR ${XRN_BUILD_DIR}/${XRN_OUTPUT_DIR} REALPATH)
 
