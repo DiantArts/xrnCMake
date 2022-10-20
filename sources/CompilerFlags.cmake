@@ -20,9 +20,9 @@ function(set_compiler_flags interface)
 
     # color
     if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-        add_compile_options(-fdiagnostics-color=always -fmax-errors)
+        add_compile_options(-fdiagnostics-color=always -fmax-errors=1)
     elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-        add_compile_options(-fcolor-diagnostics -fmax-errors)
+        add_compile_options(-fcolor-diagnostics -ferror-limit=1)
     endif()
 
 endfunction()
