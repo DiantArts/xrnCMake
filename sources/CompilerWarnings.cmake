@@ -54,6 +54,7 @@ function(set_compiler_warnings interface)
         -Wdouble-promotion # warn if float is implicit promoted to double
         -Wformat=2 # warn on security issues around functions that format output (ie printf)
         -Wno-dtor-name
+        -Wno-c++2b-extensions # disable warning when using c++23 features when not enabled
     )
 
 
