@@ -55,6 +55,8 @@ function(set_compiler_warnings interface)
         -Wformat=2 # warn on security issues around functions that format output (ie printf)
         -Wno-dtor-name
         -Wno-c++2b-extensions # disable warning when using c++23 features when not enabled
+        -Wno-c++11-narrowing # disable errors when narrowing types (::std::size_t -> int)
+        -Wno-sign-conversion # disable warning on sign conversion
     )
 
 
