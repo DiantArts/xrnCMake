@@ -18,7 +18,7 @@ function(set_compiler_flags interface errorLimit)
         endif ()
     endif ()
 
-    if (NOT DEFINED XRN_ERROR_LIMIT) ()
+    if (NOT DEFINED XRN_ERROR_LIMIT)
         SET(XRN_ERROR_LIMIT 1)
     ()
 
