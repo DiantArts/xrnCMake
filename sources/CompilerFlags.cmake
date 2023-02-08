@@ -21,6 +21,7 @@ function(set_compiler_flags interface)
     if (NOT DEFINED XRN_ERROR_LIMIT)
         SET(XRN_ERROR_LIMIT 1)
     endif ()
+    message(WARNING ${XRN_ERROR_LIMIT})
 
     # color
     if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
