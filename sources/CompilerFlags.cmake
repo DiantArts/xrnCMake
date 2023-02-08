@@ -1,4 +1,4 @@
-function(set_compiler_flags interface errorLimit)
+function(set_compiler_flags interface)
 
     # =========================================================================
     # -f flags
