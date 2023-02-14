@@ -35,7 +35,7 @@ function(set_compiler_flags interface)
     if (CMAKE_BUILD_TYPE STREQUAL "Debug")
     elseif (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
     else ()
-        add_compile_definitions(${interface} INTERFACE NO_DEBUG)
+        target_compile_definitions(${interface} INTERFACE NO_DEBUG)
     endif ()
 
 endfunction()
