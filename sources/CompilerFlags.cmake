@@ -23,10 +23,19 @@ function(set_compiler_flags interface)
     endif ()
 
     # color
-    if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
         add_compile_options(-fdiagnostics-color=always -fmax-errors=${XRN_ERROR_LIMIT})
-    elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
         add_compile_options(-fcolor-diagnostics -ferror-limit=${XRN_ERROR_LIMIT})
-    endif()
+    endif ()
+
+    #debug
+    if ()
+    endif ()
+    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+    elseif (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo")
+    else ()
+        add_compile_definitions(${interface} INTERFACE NO_DEBUG)
+    endif ()
 
 endfunction()
