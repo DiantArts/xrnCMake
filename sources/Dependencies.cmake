@@ -74,6 +74,7 @@ macro(download_dependencies interface library_versions)
         )
         FetchContent_MakeAvailable(${library_dirname})
         target_include_directories(${interface} INTERFACE ${${library_dirname}_SOURCE_DIR}/)
+        message(${${library_dirname}_SOURCE_DIR}/)
         target_include_directories(${interface} INTERFACE ${${library_dirname}_SOURCE_DIR}/sources/)
     endforeach()
 
