@@ -67,12 +67,13 @@ macro(download_dependencies interface library_versions)
     foreach(library_name IN LISTS XRN_PERSONAL_DEPENDENCIES)
         MESSAGE(STATUS "Dowloading ${library_name}")
         string(TOLOWER ${library_name} library_dirname)
+
         FetchContent_Declare(
             ${library_dirname}
             GIT_REPOSITORY https://github.com/DiantArts/${library_name}
             GIT_TAG        main
         )
-        FetchContent_MakeAvailable(${library_dirname})
+        # FetchContent_MakeAvailable(${library_dirname})
         target_include_directories(${interface} INTERFACE ${${library_dirname}_SOURCE_DIR}/externals)
         target_include_directories(${interface} INTERFACE ${${library_dirname}_SOURCE_DIR}/sources/)
     endforeach()
