@@ -70,7 +70,6 @@ macro(download_dependencies interface library_versions)
 
         get_filename_component(${library_name}_LOCAL_FULLPATH "../${library_name}" REALPATH)
         if (EXISTS "${${library_name}_LOCAL_FULLPATH}") # if directory is present locally
-            MESSAGE(WARNING "already present")
             target_include_directories(${interface} INTERFACE ${${library_name}_LOCAL_FULLPATH}/externals/)
             target_include_directories(${interface} INTERFACE ${${library_name}_LOCAL_FULLPATH}/sources/)
         else () # else dowload it
