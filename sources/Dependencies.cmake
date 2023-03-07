@@ -75,7 +75,8 @@ macro(download_dependencies interface library_versions)
             CONFIGURE_COMMAND ""
             BUILD_COMMAND ""
         )
-        FetchContent_MakeAvailable(${library_dirname})
+        FetchContent_GetProperties(${library_dirname})
+    # FetchContent_MakeAvailable(${library_dirname})
         target_include_directories(${interface} INTERFACE ${${library_dirname}_SOURCE_DIR}/externals/)
         target_include_directories(${interface} INTERFACE ${${library_dirname}_SOURCE_DIR}/sources/)
     endforeach()
