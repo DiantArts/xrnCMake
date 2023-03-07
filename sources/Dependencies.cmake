@@ -68,20 +68,26 @@ macro(download_dependencies interface library_versions)
         MESSAGE(STATUS "Dowloading ${library_name}")
         string(TOLOWER ${library_name} library_dirname)
 
-        FetchContent_Declare(
-            ${library_dirname}
-            GIT_REPOSITORY https://github.com/DiantArts/${library_name}
-            GIT_TAG        main
-            CONFIGURE_COMMAND ""
-            BUILD_COMMAND ""
-        )
-        FetchContent_GetProperties(${library_dirname})
-        if(NOT ${library_dirname}_POPULATED)
-            FetchContent_Populate(${library_dirname})
-        endif()
-    # FetchContent_MakeAvailable(${library_dirname})
-        target_include_directories(${interface} INTERFACE ${${library_dirname}_SOURCE_DIR}/externals/)
-        target_include_directories(${interface} INTERFACE ${${library_dirname}_SOURCE_DIR}/sources/)
+        get_filename_component(${library_name}_LOCAL_FULLPATH "../${library_name}" REALPATH)
+        if (EXISTS "${${library_name}_LOCAL_FULLPATH}") # if directory is present locally
+            MESSAGE(WARNING "already present")
+            target_include_directories(${interface} INTERFACE ${${library_name}_LOCAL_FULLPATH}/externals/)
+            target_include_directories(${interface} INTERFACE ${${library_name}_LOCAL_FULLPATH}/sources/)
+        else () # else dowload it
+            FetchContent_Declare(
+                ${library_dirname}
+                GIT_REPOSITORY https://github.com/DiantArts/${library_name}
+                GIT_TAG        main
+                CONFIGURE_COMMAND ""
+                BUILD_COMMAND ""
+            )
+            FetchContent_GetProperties(${library_dirname})
+            if(NOT ${library_dirname}_POPULATED)
+                FetchContent_Populate(${library_dirname})
+            endif()
+            target_include_directories(${interface} INTERFACE ${${library_dirname}_SOURCE_DIR}/externals/)
+            target_include_directories(${interface} INTERFACE ${${library_dirname}_SOURCE_DIR}/sources/)
+        endif ()
     endforeach()
 
 endmacro()
