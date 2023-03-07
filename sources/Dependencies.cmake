@@ -72,9 +72,11 @@ macro(download_dependencies interface library_versions)
             ${library_dirname}
             GIT_REPOSITORY https://github.com/DiantArts/${library_name}
             GIT_TAG        main
+            CONFIGURE_COMMAND ""
+            BUILD_COMMAND ""
         )
-        # FetchContent_MakeAvailable(${library_dirname})
-        target_include_directories(${interface} INTERFACE ${${library_dirname}_SOURCE_DIR}/externals)
+        FetchContent_MakeAvailable(${library_dirname})
+        target_include_directories(${interface} INTERFACE ${${library_dirname}_SOURCE_DIR}/externals/)
         target_include_directories(${interface} INTERFACE ${${library_dirname}_SOURCE_DIR}/sources/)
     endforeach()
 
