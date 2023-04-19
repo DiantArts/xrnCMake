@@ -70,8 +70,7 @@ macro(download_dependencies interface library_versions)
 
         get_filename_component(${library_name}_LOCAL_FULLPATH "../${library_name}" REALPATH)
         if (EXISTS "${${library_name}_LOCAL_FULLPATH}") # if directory is present locally
-            target_include_directories(${interface} INTERFACE ${${library_name}_LOCAL_FULLPATH}/externals/)
-            target_include_directories(${interface} INTERFACE ${${library_name}_LOCAL_FULLPATH}/sources/)
+            set(library_dir "${${library_name}_LOCAL_FULLPATH}")
         else () # else dowload it
             FetchContent_Declare(
                 ${library_dirname}
@@ -84,9 +83,34 @@ macro(download_dependencies interface library_versions)
             if(NOT ${library_dirname}_POPULATED)
                 FetchContent_Populate(${library_dirname})
             endif()
-            target_include_directories(${interface} INTERFACE ${${library_dirname}_SOURCE_DIR}/externals/)
-            target_include_directories(${interface} INTERFACE ${${library_dirname}_SOURCE_DIR}/sources/)
+            set(library_dir "${library_dirname}")
         endif ()
+
+        target_include_directories(${interface} INTERFACE ${library_dir}/externals/)
+        target_include_directories(${interface} INTERFACE ${library_dir}/sources/)
+
+        file(
+            GLOB_RECURSE
+            XRN_${library_dirname}_SOURCES
+            ${${library_name}_LOCAL_FULLPATH}/sources/*.cpp
+            ${${library_name}_LOCAL_FULLPATH}/sources/*.cxx
+            ${${library_name}_LOCAL_FULLPATH}/sources/*.c
+            ${${library_name}_LOCAL_FULLPATH}/sources/*.CC
+            PARENT_SCOPE
+        )
+        file(
+            GLOB_RECURSE
+            XRN_${library_dirname}_MAINS
+            ${${library_name}_LOCAL_FULLPATH}/sources/*main.cpp
+            ${${library_name}_LOCAL_FULLPATH}/sources/*main.cxx
+            ${${library_name}_LOCAL_FULLPATH}/sources/*main.c
+            ${${library_name}_LOCAL_FULLPATH}/sources/*main.CC
+            PARENT_SCOPE
+        )
+        foreach(main_file IN LISTS XRN_${library_dirname}_MAINS)
+            list(REMOVE_ITEM XRN_${library_dirname}_SOURCES "${main_file}")
+        endforeach()
+        list(APPEND XRN_SOURCES ${XRN_${library_dirname}_SOURCES})
     endforeach()
 
 endmacro()
