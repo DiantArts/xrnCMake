@@ -86,6 +86,7 @@ macro(download_dependencies interface library_versions)
             set(library_dir "${library_dirname}")
         endif ()
 
+        message(WARNING ${library_dir})
         target_include_directories(${interface} INTERFACE ${library_dir}/externals/)
         target_include_directories(${interface} INTERFACE ${library_dir}/sources/)
 
