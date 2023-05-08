@@ -83,7 +83,7 @@ macro(download_dependencies interface library_versions)
             if(NOT ${library_dirname}_POPULATED)
                 FetchContent_Populate(${library_dirname})
             endif()
-            set(library_dir "${library_dirname}")
+            set(library_dir "${${library_dirname}_SOURCE_DIR}")
         endif ()
 
         message(WARNING ${library_dir})
