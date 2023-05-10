@@ -9,7 +9,7 @@ macro(compile_shaders interface)
                 OUTPUT ${SPIRV}
                 COMMAND glslc -fshader-stage="fragment" ${SHADER} -o ${SPIRV}
                 DEPENDS ${SHADER}
-                COMMENT "Compiling ${SHADER}"
+                COMMENT "Compiling fragment shader ${SHADER}"
             )
             list(APPEND SPIRV_BINARY_FILES ${SPIRV})
         endforeach(SHADER)
@@ -21,7 +21,31 @@ macro(compile_shaders interface)
                 OUTPUT ${SPIRV}
                 COMMAND glslc -fshader-stage="vertex" ${SHADER} -o ${SPIRV}
                 DEPENDS ${SHADER}
-                COMMENT "Compiling ${SHADER}"
+                COMMENT "Compiling vertex shader ${SHADER}"
+            )
+            list(APPEND SPIRV_BINARY_FILES ${SPIRV})
+        endforeach(SHADER)
+
+        foreach(SHADER ${XRN_GEOMETRIES})
+            get_filename_component(FILE_NAME ${SHADER} NAME)
+            set(SPIRV "${XRN_GEOMETRIES_DIR}/${FILE_NAME}.spv")
+            add_custom_command(
+                OUTPUT ${SPIRV}
+                COMMAND glslc -fshader-stage="geometry" ${SHADER} -o ${SPIRV}
+                DEPENDS ${SHADER}
+                COMMENT "Compiling geometry shader ${SHADER}"
+            )
+            list(APPEND SPIRV_BINARY_FILES ${SPIRV})
+        endforeach(SHADER)
+
+        foreach(SHADER ${XRN_COMPUTES})
+            get_filename_component(FILE_NAME ${SHADER} NAME)
+            set(SPIRV "${XRN_COMPUTES_DIR}/${FILE_NAME}.spv")
+            add_custom_command(
+                OUTPUT ${SPIRV}
+                COMMAND glslc -fshader-stage="compute" ${SHADER} -o ${SPIRV}
+                DEPENDS ${SHADER}
+                COMMENT "Compiling compute shader ${SHADER}"
             )
             list(APPEND SPIRV_BINARY_FILES ${SPIRV})
         endforeach(SHADER)

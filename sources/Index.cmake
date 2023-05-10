@@ -25,6 +25,8 @@ macro(default_setup_filepaths)
     set(XRN_SHADERS_DIR_RELATIVE ${XRN_SHADERS_DIR})
     set(XRN_FRAGMENTS_DIR_RELATIVE ${XRN_SHADERS_DIR}/${XRN_FRAGMENTS_DIR})
     set(XRN_VERTEXES_DIR_RELATIVE ${XRN_SHADERS_DIR}/${XRN_VERTEXES_DIR})
+    set(XRN_GEOMETRIES_DIR_RELATIVE ${XRN_SHADERS_DIR}/${XRN_GEOMETRIES_DIR})
+    set(XRN_COMPUTES_DIR_RELATIVE ${XRN_SHADERS_DIR}/${XRN_COMPUTES_DIR})
 
     get_filename_component(XRN_ROOT_DIR ${CMAKE_SOURCE_DIR} REALPATH)
     get_filename_component(XRN_BUILD_DIR ${CMAKE_BINARY_DIR} REALPATH)
@@ -36,8 +38,10 @@ macro(default_setup_filepaths)
     get_filename_component(XRN_OUTPUT_DIR ${XRN_BUILD_DIR}/${XRN_OUTPUT_DIR} REALPATH)
 
     get_filename_component(XRN_SHADERS_DIR ${XRN_SHADERS_DIR} REALPATH)
-    get_filename_component(XRN_VERTEXES_DIR ${XRN_VERTEXES_DIR_RELATIVE} REALPATH)
     get_filename_component(XRN_FRAGMENTS_DIR ${XRN_FRAGMENTS_DIR_RELATIVE} REALPATH)
+    get_filename_component(XRN_VERTEXES_DIR ${XRN_VERTEXES_DIR_RELATIVE} REALPATH)
+    get_filename_component(XRN_GEOMOTRY_DIR ${XRN_GEOMETRIES_DIR_RELATIVE} REALPATH)
+    get_filename_component(XRN_COMPUTES_DIR ${XRN_COMPUTES_DIR_RELATIVE} REALPATH)
 endmacro()
 
 macro(default_find_files)
@@ -77,6 +81,26 @@ macro(default_find_files)
         ${XRN_SHADERS_DIR}/*.vert
         ${XRN_SHADERS_DIR}/*.vertex
         ${XRN_SHADERS_DIR}/*.fs
+        PARENT_SCOPE
+    )
+    file(
+        GLOB_RECURSE
+        XRN_GEOMETRIES
+        ${XRN_GEOMETRIES_DIR}/*.glsl
+        ${XRN_GEOMETRIES_DIR}/*.shader
+        ${XRN_SHADERS_DIR}/*.geom
+        ${XRN_SHADERS_DIR}/*.geometry
+        ${XRN_SHADERS_DIR}/*.gs
+        PARENT_SCOPE
+    )
+    file(
+        GLOB_RECURSE
+        XRN_COMPUTES
+        ${XRN_COMPUTES_DIR}/*.glsl
+        ${XRN_COMPUTES_DIR}/*.shader
+        ${XRN_SHADERS_DIR}/*.comp
+        ${XRN_SHADERS_DIR}/*.compute
+        ${XRN_SHADERS_DIR}/*.cs
         PARENT_SCOPE
     )
     list(REMOVE_ITEM XRN_SOURCES "${XRN_MAIN}")
