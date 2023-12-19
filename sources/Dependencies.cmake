@@ -25,36 +25,41 @@ function(conan_config_set)
     endif()
 endfunction()
 
-macro(download_dependencies interface library_versions)
+
+macro(conan_config)
     # dependencies directory
     list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
     list(APPEND CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
 
     # download conan.cmake if does not exist
-    if (ENABLE_UPDATE_CONAN OR NOT EXISTS "${XRN_TOOLCHAIN_DETAILS_DIR}/conan.cmake")
-        message(STATUS "Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
+    if (ENABLE_UPDATE_CONAN OR NOT EXISTS "${XRN_TOOLCHAIN_DETAILS_DIR}/conan_provider.cmake")
+        message(STATUS "Downloading conan_provider.cmake from https://github.com/conan-io/cmake-conan")
         file(
-            DOWNLOAD "https://raw.githubusercontent.com/conan-io/cmake-conan/0.18.1/conan.cmake"
-            "${XRN_TOOLCHAIN_DETAILS_DIR}/conan.cmake"
+            DOWNLOAD "https://raw.githubusercontent.com/conan-io/cmake-conan/develop2/conan_provider.cmake"
+            "${XRN_TOOLCHAIN_DETAILS_DIR}/conan_provider.cmake"
             TLS_VERIFY ON
         )
     endif()
-    include(${XRN_TOOLCHAIN_DETAILS_DIR}/conan.cmake)
+    # include(${XRN_TOOLCHAIN_DETAILS_DIR}/conan_provider.cmake)
 
     # add download remotes
-    conan_config_set(NAME general.revisions_enabled VALUE 1)
-    conan_add_remote(NAME bincrafters URL https://bincrafters.jfrog.io/artifactory/api/conan/public-conan)
-    conan_add_remote(NAME conancenter URL https://center.conan.io)
+    # conan_config_set(NAME general.revisions_enabled VALUE 1)
+    # conan_add_remote(NAME bincrafters URL https://bincrafters.jfrog.io/artifactory/api/conan/public-conan)
+    # conan_add_remote(NAME conancenter URL https://center.conan.io)
 
     # run it
-    conan_cmake_configure(REQUIRES ${library_versions} GENERATORS cmake_find_package)
-    conan_cmake_autodetect(settings)
-    conan_cmake_install(
-        PATH_OR_REFERENCE .
-        GENERATOR cmake
-        BUILD missing
-        SETTINGS ${settings}
-    )
+    # conan_cmake_configure(REQUIRES ${library_versions} GENERATORS cmake_find_package)
+    # conan_cmake_autodetect(settings)
+    # conan_cmake_install(
+    # PATH_OR_REFERENCE .
+    # GENERATOR cmake
+    # BUILD missing
+    # SETTINGS ${settings}
+    # )
+endmacro()
+
+macro(download_dependencies interface library_versions)
+    conan_config()
 
     # includes
     include(FetchContent)

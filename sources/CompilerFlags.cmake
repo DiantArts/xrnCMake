@@ -29,6 +29,7 @@ function(set_compiler_flags interface)
         add_compile_options(-fcolor-diagnostics -ferror-limit=${XRN_ERROR_LIMIT})
     endif ()
 
+    add_compile_definitions(FMT_USE_NONTYPE_TEMPLATE_ARGS=true)
     #debug
     if ()
     endif ()
